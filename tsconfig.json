@@ -10,6 +10,9 @@
     "moduleResolution": "node",
     "declaration": true
   },
+  "include": [
+    "lib/**/*.ts"
+  ],
   "exclude": [
     "lib/**/*.spec.ts"
   ]
