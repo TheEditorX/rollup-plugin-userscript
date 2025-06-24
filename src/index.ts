@@ -22,13 +22,17 @@ export default async function userscript(
   return {
     name: "userscript",
 
-    generateBundle(_options, bundles) {
+    async generateBundle(_options, bundles) {
       for (const [, bundleDetails] of Object.entries(bundles)) {
         if (bundleDetails.type !== "chunk") continue;
 
         const compiledOptions = rawOptions;
         if (autoDetectGrants) {
-          const ast = parse(bundleDetails.code, { ecmaVersion: 2020 });
+          await fs.writeFile("temp.js", bundleDetails.code);
+          const ast = parse(bundleDetails.code, {
+            ecmaVersion: "latest",
+            sourceType: "module",
+          });
           const detectedGrants = detectGrants(ast);
           if (!compiledOptions.grants || compiledOptions.grants === "none")
             compiledOptions.grants = detectedGrants as GrantTypes[];
@@ -41,6 +45,7 @@ export default async function userscript(
         const banner = buildMetadataBlock({
           ...defaultOptions,
           ...compiledOptions,
+          grant: compiledOptions.grants,
           icon: icon?.lowResolution,
           icon64: icon?.highResolution,
         });
