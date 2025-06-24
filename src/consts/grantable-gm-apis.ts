@@ -84,6 +84,10 @@ function createMatchGMApiCall(
   parentName: string = "GM",
 ): (node: Node) => boolean {
   return (node: Node) => {
+    if (isIdentifierExpression(node)) {
+      return node.name === globalName;
+    }
+
     if (!isCallExpression(node)) return false;
     switch (node.callee.type) {
       case "Identifier":

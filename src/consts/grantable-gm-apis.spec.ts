@@ -7,7 +7,7 @@ const createWalkHandler = (
   matchedRef: { matched: boolean },
 ): SimpleVisitors<unknown> => {
   return {
-    CallExpression(node) {
+    Expression(node) {
       if (matchedRef.matched) return;
       if (GRANTABLE_GM_APIS[apiKey](node)) {
         matchedRef.matched = true;
@@ -15,7 +15,7 @@ const createWalkHandler = (
     },
     Identifier(node) {
       if (matchedRef.matched) return;
-      if (node.name === apiKey) {
+      if (GRANTABLE_GM_APIS[apiKey](node)) {
         matchedRef.matched = true;
       }
     },
@@ -63,6 +63,28 @@ describe("GRANTABLE_GM_APIS matchers", () => {
       simple(ast, createWalkHandler(apiKey, matchedRef));
 
       expect(matchedRef.matched).toBe(true);
+    });
+
+    it(`matches ${apiKey} through call through assigned var`, () => {
+      const ast = parse(
+        `const agent = typeof GM_${apiKey} === 'function' ? GM_${apiKey} : GM.${apiKey};
+        agent();`,
+        { ecmaVersion: 2020 },
+      );
+      expect(
+        (() => {
+          const matchedRef = { matched: false };
+          simple(ast, createWalkHandler(`GM_${apiKey}`, matchedRef));
+          return matchedRef.matched;
+        })(),
+      ).toBe(true);
+      expect(
+        (() => {
+          const matchedRef = { matched: false };
+          simple(ast, createWalkHandler(`GM.${apiKey}`, matchedRef));
+          return matchedRef.matched;
+        })(),
+      ).toBe(true);
     });
   });
 
