@@ -23,8 +23,9 @@ export default async function userscript(
     name: "userscript",
 
     async generateBundle(_options, bundles) {
-      for (const [, bundleDetails] of Object.entries(bundles)) {
+      for (const [bundleName, bundleDetails] of Object.entries(bundles)) {
         if (bundleDetails.type !== "chunk") continue;
+        if (!bundleName.endsWith("user.js")) continue;
 
         const compiledOptions = rawOptions;
         if (autoDetectGrants) {
@@ -50,6 +51,12 @@ export default async function userscript(
           icon64: icon?.highResolution,
         });
         bundleDetails.code = `${banner}${bundleDetails.code}`;
+
+        this.emitFile({
+          type: "asset",
+          fileName: bundleName.replace(".user.js", ".meta.js"),
+          source: banner,
+        });
       }
     },
   };
