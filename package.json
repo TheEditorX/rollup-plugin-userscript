@@ -24,7 +24,8 @@
     "default": "./dist/cjs/index.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
   "scripts": {
     "lint": "eslint src/",
