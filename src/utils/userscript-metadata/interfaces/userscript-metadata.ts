@@ -100,7 +100,12 @@ export interface UserscriptMetadata {
    *
    * @default {@link RunAt.DocumentEnd}
    */
-  runAt: RunAt;
+  runAt:
+    | "document-start"
+    | "document-body"
+    | "document-end"
+    | "document-idle"
+    | "context-menu";
 
   /** You can add tags to your script which will be visible in the script list if this tag is part of your system's tag list. Tags can be useful to categorize your scripts or to mark them as a certain type. The list of tags can be found at the script's settings page. */
   tags: Array<string>;
