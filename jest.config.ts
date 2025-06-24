@@ -9,5 +9,5 @@ export default {
   transform: {
     ...tsJestTransformCfg,
   },
-  roots: ["<rootDir>/lib"],
+  roots: ["<rootDir>/src"],
 } as Config;
