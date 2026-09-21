@@ -6,7 +6,7 @@
     "url": "git+https://github.com/TheEditorX/rollup-plugin-userscript.git"
   },
   "author": "David Slutsky",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "keywords": [
     "rollup-plugin",
