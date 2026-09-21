@@ -29,7 +29,6 @@ export default async function userscript(
 
         const compiledOptions = rawOptions;
         if (autoDetectGrants) {
-          await fs.writeFile("temp.js", bundleDetails.code);
           const ast = parse(bundleDetails.code, {
             ecmaVersion: "latest",
             sourceType: "module",
